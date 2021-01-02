@@ -28,12 +28,50 @@ class _HomeActivityState extends State<HomeActivity> {
 
   PressedButton(String val) {
     //print(val);
-    if (val == "C") {
+    if (val == "AC") {
       _out = "0";
       num1 = 0;
       num2 = 0;
       op = "";
-    } else if (val == "+" || val == "-" || val == "*" || val == "/") {}
+    } else if (val == "+" || val == "-" || val == "*" || val == "/") {
+      num1 = double.parse(output);
+      op = val;
+      _out = "0";
+      output = output + val;
+    } else if (val == ".") {
+      if (_out.contains(".")) {
+        return;
+      } else {
+        _out = _out + val;
+      }
+    } else if (val == "=") {
+      num2 = double.parse(output);
+
+      if (op == "+") {
+        _out = (num1 + num2).toString();
+      }
+
+      if (op == "-") {
+        _out = (num1 - num2).toString();
+      }
+
+      if (op == "*") {
+        _out = (num1 * num2).toString();
+      }
+
+      if (op == "/") {
+        _out = (num1 / num2).toString();
+      }
+
+      num1 = 0.0;
+      num2 = 0.0;
+    } else {
+      _out = _out + val;
+    }
+
+    setState(() {
+      output = double.parse(_out).toStringAsFixed(2);
+    });
   }
 
   // Button Widget
@@ -76,7 +114,7 @@ class _HomeActivityState extends State<HomeActivity> {
               padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 50.0),
               child: Text(
                 output,
-                style: TextStyle(fontSize: 48.0, color: Color(0xFFF2E9E4)),
+                style: TextStyle(fontSize: 60.0, color: Color(0xFFF2E9E4)),
               ),
             ),
             Expanded(
@@ -88,8 +126,9 @@ class _HomeActivityState extends State<HomeActivity> {
             Column(
               children: <Widget>[
                 Row(
-                  children: <Widget>[
+                  children: [
                     calcBtn("AC"),
+                    calcBtn("<"),
                     calcBtn("/"),
                   ],
                 ),
@@ -119,6 +158,7 @@ class _HomeActivityState extends State<HomeActivity> {
                 ),
                 Row(
                   children: <Widget>[
+                    calcBtn("."),
                     calcBtn("0"),
                     calcBtn("="),
                   ],
